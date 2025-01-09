@@ -13,5 +13,9 @@ extern char **environ;
 
 char *find_comand(char *cmd);
 void print_env(void);
+void display_prompt(void);
+char *read_input(void);
+char **split_input(char *input);
+void execute_command(char **args);
 
 #endif
