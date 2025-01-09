@@ -44,7 +44,7 @@ requires access to standard UNIX executables.
 
 .SH AUTHOR
 Diego Mercado <mercadodiego2006gmail.com>
-Emanuel Rosa <>
+Emanuel Rosa <ejrosa9028@gmail.com>
 
 .SH SEE ALSO
 sh(1), bash(1), execve(2), fork(2)
