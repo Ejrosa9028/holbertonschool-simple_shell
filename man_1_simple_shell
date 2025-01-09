@@ -1,0 +1,50 @@
+.TH simple_shell 1 "January 2025" "1.1" "Simple Shell Manual"
+
+.SH NAME
+simple_shell \- a simple UNIX command-line interpreter
+
+.SH SYNOPSIS
+.B simple_shell
+.RB [ no options ]
+
+.SH DESCRIPTION
+.B simple_shell
+is a simple UNIX command-line interpreter written in C. It supports the execution of basic commands along with their arguments. This shell reads input from the user, parses the input into a command and arguments, and executes the command.
+
+.SH USAGE
+After starting the shell, you will see a
+.B $
+prompt. You can type a command followed by its arguments and press Enter. The shell will execute the command and display the prompt again. To exit the shell, use the
+.B exit
+command or press Ctrl+D.
+
+.SH COMMANDS
+The shell can execute any binary that exists in the current directory or by providing the absolute path.
+
+Example usage:
+.TP
+\fBls -l\fP
+Lists files in the current directory in long format.
+
+.TP
+\fBecho "Hello, World!"\fP
+Displays the text "Hello, World!" on the screen.
+
+.TP
+\fBexit\fP
+Exits the shell.
+
+.SH OPTIONS
+.B simple_shell
+does not support any options.
+
+.SH FILES
+.B simple_shell
+requires access to standard UNIX executables.
+
+.SH AUTHOR
+Diego Mercado <mercadodiego2006gmail.com>
+Emanuel Rosa <>
+
+.SH SEE ALSO
+sh(1), bash(1), execve(2), fork(2)
