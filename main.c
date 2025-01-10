@@ -19,11 +19,25 @@ int main(void)
 
 		if (line == NULL) /*If (Ctrl+D), exit the shell*/
 		{
-			printf("\n");
+			if (isatty(STDIN_FILENO))
+			{
+				printf("\n");
+			}
 			break;
 		}
 
+		if (is_empty_or_spaces(line)) 
+		{
+			free(line);
+			continue;
+		}
+
 		args = parse_input(line); /*Process input*/
+
+		if (args == NULL || args[0] == NULL) {
+			free(line);
+			continue;  /*If it could not be analyzed, the prompt is displayed again.*/
+		}
 
 		if (args[0] != NULL && strcmp(args[0], "exit") == 0) /*If "exit, exit*/
 		{

@@ -7,18 +7,17 @@
  */
 char *read_input(void)
 {
-	char *line = NULL;
-	size_t bufsize = 0;
-
-	if (getline(&line, &bufsize, stdin) == -1)
+	char *line = malloc(MAX_CMD_LEN * sizeof(char));
+	if (line == NULL)
 	{
-		if (line == NULL)
-		{
-			return (NULL);
-		}
-
-		perror("./hsh");
+		perror("Error al asignar memoria");
 		exit(EXIT_FAILURE);
+	}
+
+	if (fgets(line, MAX_CMD_LEN, stdin) == NULL)
+	{
+		free(line);
+		return NULL;
 	}
 	return (line);
 }
@@ -36,6 +35,12 @@ char **parse_input(char *line)
 	char **tokens = malloc(bufsize * sizeof(char *));
 	char *token;
 
+	if (tokens == NULL)
+	{
+		perror("Error al asignar memoria para tokens");
+		exit(EXIT_FAILURE);
+	}
+
 	token = strtok(line, DELIM);
 	while (token != NULL)
 	{
@@ -46,6 +51,11 @@ char **parse_input(char *line)
 		{
 			bufsize += 64;
 			tokens = realloc(tokens, bufsize * sizeof(char *));
+			if (tokens == NULL)
+			{
+				perror("Error al realocar memoria para tokens");
+				exit(EXIT_FAILURE);
+			}
 		}
 
 		token = strtok(NULL, DELIM);
@@ -111,8 +121,8 @@ void execute_command(char **args)
 		if (execvp(args[0], args) == -1)
 		{
 			perror(args[0]);
-			exit(EXIT_FAILURE);
 		}
+		exit(EXIT_FAILURE);
 	}
 	else
 	{
@@ -140,4 +150,34 @@ void handle_exit(char **args)
 		/*If there are no arguments, we terminate the shell*/
 		exit(0);
 	}
+}
+
+/**
+ * handle_env - Prints the current environment variables.
+ *
+ * This function prints the environment variables currently set in the system.
+ * It prints each variable in the format: NAME=VALUE
+ *
+ * Return: Nothing.
+ */
+void handle_env(void)
+{
+	int i = 0;
+
+	/* Print each environment variable in the format NAME=VALUE */
+	for (; environ[i] != NULL; i++)
+	{
+		printf("%s\n", environ[i]);
+	}
+}
+
+int is_empty_or_spaces(char *line)
+{
+	while (*line) {
+		if (!isspace(*line)) {
+			return 0;  /*La línea tiene algo que no es un espacio*/
+		}
+		line++;
+	}
+	return 1;  /*La línea está vacía o solo tiene espacios*/
 }
