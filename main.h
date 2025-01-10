@@ -1,5 +1,7 @@
 #ifndef MAIN
 #define MAIN
+#define MAX_CMD_LEN 1024
+#define DELIM " \t\r\n\a"  /*Delimitadores para dividir la entrada*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,7 +11,7 @@
 
 extern char **environ;  /*Declaración externa de la variable environ*/
 
-/*Prototipo*/
+/*Prototipos*/
 char *read_input(void);
 char **parse_input(char *line);
 char *find_command_in_path(char *command);

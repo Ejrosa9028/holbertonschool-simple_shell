@@ -1,5 +1,10 @@
 #include "main.h"
 
+/**
+ * read_input - Lee los datos introducidos por el usuario
+ *
+ * Return: Un puntero a la cadena de entrada o NULL si hay un error.
+ */
 char *read_input(void)
 {
 	char *line = NULL;
@@ -12,12 +17,18 @@ char *read_input(void)
 			return (NULL);
 		}
 
-		perror("Error");
+		perror("./hsh");
 		exit(EXIT_FAILURE);
 	}
 	return (line);
 }
 
+/**
+ * parse_input - Divide la cadena de entrada en tokens
+ * @line: El string de entrada que se va a dividir
+ *
+ * Return: Un array de strings (tokens).
+ */
 char **parse_input(char *line)
 {
 	int bufsize = 64;
@@ -43,7 +54,14 @@ char **parse_input(char *line)
 	return (tokens);
 }
 
-/*Función para verificar si el comando existe en el PATH*/
+/**
+ * find_command_in_path - Busca un comando en los directorios listados en PATH.
+ *
+ * @command: El comando a buscar.
+ *
+ * Return: Una cadena que contiene la ruta completa al comando si se encuentra,
+ *         o NULL si no se encuentra el comando.
+ */
 char *find_command_in_path(char *command)
 {
 	char *path = getenv("PATH");  /*Obtenemos la variable de entorno PATH*/
@@ -72,13 +90,19 @@ char *find_command_in_path(char *command)
 	return (NULL);  /*Si no lo encontramos, devolvemos NULL*/
 }
 
+/**
+ * execute_command - Ejecuta un comando creando un nuevo proceso
+ * @args: Array de argumentos de comandos
+ *
+ * Return: Nada.
+ */
 void execute_command(char **args)
 {
 	pid_t pid = fork();
 
 	if (pid == -1)
 	{
-		perror("Error al ejecutar el comando");
+		perror("./hsh");
 		return;
 	}
 
@@ -86,7 +110,7 @@ void execute_command(char **args)
 	{
 		if (execvp(args[0], args) == -1)
 		{
-			perror("Error al ejecutar el comando");
+			perror(args[0]);
 		}
 		exit(EXIT_FAILURE);
 	}
@@ -96,7 +120,14 @@ void execute_command(char **args)
 	}
 }
 
-/*Función para manejar el comando exit*/
+/**
+ * handle_exit - Maneja el comando incorporado "exit".
+ *               Sale del shell cuando se le llama.
+ *
+ * @args: Array de argumentos pasados al comando.
+ *
+ * Return: None.
+ */
 void handle_exit(char **args)
 {
 	if (args[1] != NULL)
@@ -108,17 +139,5 @@ void handle_exit(char **args)
 	{
 		/*Si no hay argumentos, terminamos el shell*/
 		exit(0);
-	}
-}
-
-/*Función para manejar el comando env (imprime el entorno actual)*/
-void handle_env(void)
-{
-	int i = 0;
-
-	/*Imprimimos cada variable de entorno en formato KEY=VALUE*/
-	for (; environ[i] != NULL; i++)
-	{
-		printf("%s\n", environ[i]);
 	}
 }
