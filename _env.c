@@ -14,7 +14,7 @@ void handle_env(void)
 {
 	int i = 0;
 
-	/*Imprimimos cada variable de entorno en formato KEY=VALUE*/
+	/* Print each environment variable in the format NAME=VALUE */
 	for (; environ[i] != NULL; i++)
 	{
 		printf("%s\n", environ[i]);
