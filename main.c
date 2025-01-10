@@ -14,6 +14,7 @@ int main(void)
 		if (isatty(STDIN_FILENO))
 		{
 			write(STDOUT_FILENO, "($) ", 4);
+			fflush(stdout);
 		}
 		line = read_input(); /*Read user input*/
 
@@ -24,6 +25,12 @@ int main(void)
 				write(STDOUT_FILENO, "\n", 1);
 			}
 			break;
+		}
+
+		/* Limpiar la nueva línea al final de la entrada */
+		if (line[strlen(line) - 1] == '\n')
+		{
+			line[strlen(line) - 1] = '\0'; /* Quitar el '\n' del final */
 		}
 
 		if (is_empty_or_spaces(line)) 

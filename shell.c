@@ -18,17 +18,17 @@ char *read_input(void)
 
 	bytes_read = read(STDIN_FILENO, line, MAX_LEN - 1);
 
-	if (bytes_read == -1)
+	if (bytes_read == -1)  /* Si hubo un error al leer */
 	{
 		perror("Error al leer la entrada");
 		free(line);
-		return NULL;
+		return (NULL);
 	}
 
 	if (bytes_read == 0)
 	{
 		free(line);
-		return NULL;
+		return (NULL);
 	}
 
 	line[bytes_read] = '\0';
@@ -55,7 +55,7 @@ char **parse_input(char *line)
 		exit(EXIT_FAILURE);
 	}
 
-	token = strtok(line, DELIM);
+	token = strtok(line, " ");
 	while (token != NULL)
 	{
 		tokens[position] = token;
@@ -72,7 +72,7 @@ char **parse_input(char *line)
 			}
 		}
 
-		token = strtok(NULL, DELIM);
+		token = strtok(NULL, " ");
 	}
 	tokens[position] = NULL;
 	return (tokens);
@@ -123,25 +123,40 @@ char *find_command_in_path(char *command)
 void execute_command(char **args)
 {
 	pid_t pid = fork();
-	int status;
-
-	if (pid == -1)
-	{
-		perror("./hsh");
-		return;
-	}
 
 	if (pid == 0)
 	{
-		if (execvp(args[0], args) == -1)
+		char *command = args[0];
+
+		/* Verifica si el comando es una ruta relativa (como ../../hbtn_ls) */
+		if (command[0] == '.' || command[0] == '/')
 		{
-			perror("Error al ejecutar el comando");
+			if (execvp(command, args) == -1)  /* Intentar ejecutar el comando */
+			{
+				perror("Error al ejecutar el comando");
+				exit(EXIT_FAILURE);
+			}
 		}
-		exit(EXIT_FAILURE);
+		else
+		{
+			if (execvp(command, args) == -1)
+			{
+				perror("Error al ejecutar el comando");
+				exit(EXIT_FAILURE);			
+			}
+			else
+			{
+				perror("Error creando el proceso");
+			}
+		}
 	}
-	else
+	else if (pid < 0)  /* Error en el fork */
 	{
-		waitpid(pid, &status, 0);
+		perror("Error al crear el proceso hijo");
+	}
+	else  /* En el padre */
+	{
+		wait(NULL);  /* Esperar a que el hijo termine */
 	}
 }
 
@@ -186,15 +201,19 @@ void handle_env(void)
 	}
 }
 
-int is_empty_or_spaces(char *line)
+int is_empty_or_spaces(char *str)
 {
-	while (*line) {
-		if (!is_whitespace(*line)) {
-			return (0);  /*La línea tiene algo que no es un espacio*/
-		}
-		line++;
+	int i = 0;
+
+	if (str == NULL)
+		return (1);
+
+	for (; str[i]; i++)
+	{
+		if (str[i] != ' ' && str[i] != '\t')  /* Si hay algo que no es espacio */
+			return (0);
 	}
-	return (1);  /*La línea está vacía o solo tiene espacios*/
+	return (1);  /* La cadena está vacía o solo tiene espacios */
 }
 
 int is_whitespace(char c)
