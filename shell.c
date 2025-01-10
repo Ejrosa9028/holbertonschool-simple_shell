@@ -1,9 +1,9 @@
 #include "main.h"
 
 /**
- * read_input - Lee los datos introducidos por el usuario
+ * read_input - Reads the data entered by the user
  *
- * Return: Un puntero a la cadena de entrada o NULL si hay un error.
+ * Return: A pointer to the input string or NULL if there is an error.
  */
 char *read_input(void)
 {
@@ -24,10 +24,10 @@ char *read_input(void)
 }
 
 /**
- * parse_input - Divide la cadena de entrada en tokens
- * @line: El string de entrada que se va a dividir
+ * parse_input - Splits the input string into tokens
+ * @line: The input string to be split
  *
- * Return: Un array de strings (tokens).
+ * Return: An array of strings (tokens).
  */
 char **parse_input(char *line)
 {
@@ -55,46 +55,46 @@ char **parse_input(char *line)
 }
 
 /**
- * find_command_in_path - Busca un comando en los directorios listados en PATH.
+ * find_command_in_path - Search for a command in the directories listed in PATH.
  *
- * @command: El comando a buscar.
+ * @command: The command to search for..
  *
- * Return: Una cadena que contiene la ruta completa al comando si se encuentra,
- *         o NULL si no se encuentra el comando.
+ * Return: A string containing the full path to the command if found,
+ *         or NULL if the command is not found.
  */
 char *find_command_in_path(char *command)
 {
-	char *path = getenv("PATH");  /*Obtenemos la variable de entorno PATH*/
-	char *path_copy = strdup(path);  /*Hacemos una copia de PATH*/
-	char *dir = strtok(path_copy, ":");  /*Dividimos el PATH en directorios*/
+	char *path = getenv("PATH");  /*We get the PATH environment variable*/
+	char *path_copy = strdup(path);  /*We make a copy of PATH*/
+	char *dir = strtok(path_copy, ":");  /*We divide the PATH into directories*/
 	char *full_path = NULL;
 
-	/*Buscamos el comando en cada directorio de PATH*/
+	/*We look for the command in each directory of PATH*/
 	while (dir != NULL)
 	{
 		full_path = malloc(strlen(dir) + strlen(command) + 2);
 		sprintf(full_path, "%s/%s", dir, command);
 
-		/*Si el archivo existe y es ejecutable, lo devolvemos*/
+		/*If the file exists and is executable, we return it*/
 		if (access(full_path, X_OK) == 0)
 		{
 			free(path_copy);
 			return (full_path);
 		}
 
-		free(full_path);  /*Liberamos memoria si no lo encontramos*/
-		dir = strtok(NULL, ":");  /*Vamos al siguiente directorio*/
+		free(full_path);  /*We free memory if we don't find it*/
+		dir = strtok(NULL, ":");  /*Let's go to the next directory*/
 	}
 
 	free(path_copy);
-	return (NULL);  /*Si no lo encontramos, devolvemos NULL*/
+	return (NULL);  /*If we don't find it, we return NULL*/
 }
 
 /**
- * execute_command - Ejecuta un comando creando un nuevo proceso
- * @args: Array de argumentos de comandos
+ * execute_command - Execute a command by creating a new process
+ * @args: Array of command arguments
  *
- * Return: Nada.
+ * Return: None.
  */
 void execute_command(char **args)
 {
@@ -121,10 +121,10 @@ void execute_command(char **args)
 }
 
 /**
- * handle_exit - Maneja el comando incorporado "exit".
- *               Sale del shell cuando se le llama.
+ * handle_exit - Handles the built-in "exit" command.
+ *               Exits the shell when called.
  *
- * @args: Array de argumentos pasados al comando.
+ * @args: Array of arguments passed to the command.
  *
  * Return: None.
  */
@@ -132,12 +132,12 @@ void handle_exit(char **args)
 {
 	if (args == NULL || args[1] != NULL)
 	{
-		/*Si hay algún argumento adicional, muestra un error*/
+		/*If there are any additional arguments, it displays an error*/
 		fprintf(stderr, "Usage: exit\n");
 	}
 	else
 	{
-		/*Si no hay argumentos, terminamos el shell*/
+		/*If there are no arguments, we terminate the shell*/
 		exit(0);
 	}
 }
