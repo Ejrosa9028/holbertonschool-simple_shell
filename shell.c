@@ -128,26 +128,24 @@ void execute_command(char **args)
 	{
 		char *command = args[0];
 
-		/* Verifica si el comando es una ruta relativa (como ../../hbtn_ls) */
-		if (command[0] == '.' || command[0] == '/')
+		/* Normalizamos la ruta del comando antes de ejecutar */
+		normalize_path(command);
+
+		/* Comprobar si el PATH está vacío, si lo está usar la ruta completa */
+        if (getenv("PATH") == NULL || strlen(getenv("PATH")) == 0)
+        {
+            if (command[0] != '/')
+            {
+                command = malloc(strlen("/bin/") + strlen(command) + 1);
+                strcpy(command, "/bin/");
+                strcat(command, args[0]);
+            }
+        }
+
+		if (execvp(command, args) == -1)  /* Intentar ejecutar el comando */
 		{
-			if (execvp(command, args) == -1)  /* Intentar ejecutar el comando */
-			{
-				perror("Error al ejecutar el comando");
-				exit(EXIT_FAILURE);
-			}
-		}
-		else
-		{
-			if (execvp(command, args) == -1)
-			{
-				perror("Error al ejecutar el comando");
-				exit(EXIT_FAILURE);			
-			}
-			else
-			{
-				perror("Error creando el proceso");
-			}
+			perror("Error al ejecutar el comando");
+			exit(EXIT_FAILURE);
 		}
 	}
 	else if (pid < 0)  /* Error en el fork */
@@ -242,4 +240,21 @@ char *trim_spaces(char *str)
 
 	*(end + 1) = '\0';  /*Agregar el terminador nulo al final de la cadena*/
 	return (str);
+}
+
+void normalize_path(char *path)
+{
+	char *src = path, *dst = path;
+	while (*src)
+	{
+		*dst = *src;
+		if (*src == '/' && *(src + 1) == '/')
+		{
+			while (*(src + 1) == '/')
+				src++;  /*Saltar barras consecutivas*/
+		}
+		src++;
+		dst++;
+	}
+	*dst = '\0';  /*Finaliza la cadena normalizada*/
 }

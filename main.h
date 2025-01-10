@@ -22,5 +22,6 @@ void handle_env(void);
 int is_empty_or_spaces(char *line);
 int is_whitespace(char c);
 char *trim_spaces(char *str);
+void normalize_path(char *path);
 
 #endif
