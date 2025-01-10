@@ -1,13 +1,12 @@
 #include "main.h"
 
 /**
- * handle_env - Imprime las variables de entorno actuales.
+ * handle_env - Prints the current environment variables.
  *
- * Esta función muestra las variables de entorno que están actualmente
- * establecidas en el sistema. Imprime cada variable en el formato:
- * NAME=VALUE
+ * This function prints the environment variables currently set in the system.
+ * It prints each variable in the format: NAME=VALUE
  *
- * Return: Nada.
+ * Return: Nothing.
  */
 void handle_env(void)
 {
