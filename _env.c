@@ -1,5 +1,6 @@
 #include "main.h"
 
+extern char **environ;
 /**
  * handle_env - Imprime las variables de entorno actuales.
  *
