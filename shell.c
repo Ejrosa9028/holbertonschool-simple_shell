@@ -135,7 +135,7 @@ void execute_command(char **args)
 	{
 		if (execvp(args[0], args) == -1)
 		{
-			perror(args[0]);
+			perror("Error al ejecutar el comando");
 		}
 		exit(EXIT_FAILURE);
 	}
