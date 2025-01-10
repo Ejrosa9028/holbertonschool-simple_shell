@@ -8,32 +8,32 @@
 char *read_input(void)
 {
 	char *line = malloc(MAX_LEN * sizeof(char));
-    ssize_t bytes_read;
+	ssize_t bytes_read;
 
-    if (line == NULL)
-    {
-        perror("Error al asignar memoria");
-        exit(EXIT_FAILURE);
-    }
+	if (line == NULL)
+	{
+		perror("Error al asignar memoria");
+		exit(EXIT_FAILURE);
+	}
 
-    bytes_read = read(STDIN_FILENO, line, MAX_LEN - 1);
+	bytes_read = read(STDIN_FILENO, line, MAX_LEN - 1);
 
-    if (bytes_read == -1)
-    {
-        perror("Error al leer la entrada");
-        free(line);
-        return NULL;
-    }
+	if (bytes_read == -1)
+	{
+		perror("Error al leer la entrada");
+		free(line);
+		return NULL;
+	}
 
-    if (bytes_read == 0)
-    {
-        free(line);
-        return NULL;
-    }
+	if (bytes_read == 0)
+	{
+		free(line);
+		return NULL;
+	}
 
-    line[bytes_read] = '\0';
+	line[bytes_read] = '\0';
 
-    return (line);	
+	return (line);	
 }
 
 /**
@@ -189,10 +189,15 @@ void handle_env(void)
 int is_empty_or_spaces(char *line)
 {
 	while (*line) {
-		if (!isspace(*line)) {
-			return 0;  /*La línea tiene algo que no es un espacio*/
+		if (!is_whitespace(*line)) {
+			return (0);  /*La línea tiene algo que no es un espacio*/
 		}
 		line++;
 	}
-	return 1;  /*La línea está vacía o solo tiene espacios*/
+	return (1);  /*La línea está vacía o solo tiene espacios*/
+}
+
+int is_whitespace(char c)
+{
+	return (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == '\f');
 }

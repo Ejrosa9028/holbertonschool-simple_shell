@@ -8,7 +8,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
-#include <ctype.h>
+#include <sys/types.h>
 
 extern char **environ;  /*Declaración externa de la variable environ*/
 
@@ -20,5 +20,6 @@ void execute_command(char **args);
 void handle_exit(char **args);
 void handle_env(void);
 int is_empty_or_spaces(char *line);
+int is_whitespace(char c);
 
 #endif
