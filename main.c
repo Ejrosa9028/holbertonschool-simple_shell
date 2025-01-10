@@ -1,49 +1,49 @@
 #include "main.h"
 
 /**
- * main - El punto de entrada para el programa shell
+ * main - Entry point for the shell program
  *
- * Return: Siempre 0.
+ * Return: Always 0.
  */
 int main(void)
 {
 	char *line, **args;
 
 	do {
-		if (isatty(STDIN_FILENO)) /*Muestra el prompt (modo interactivo)*/
+		if (isatty(STDIN_FILENO)) /*Dispaly prompt in interactive mode*/
 		{
 			printf("($) ");
 		}
 
-		line = read_input(); /*Lee la entrada del usuario*/
+		line = read_input(); /*Read user input*/
 
-		if (line == NULL) /*Si llega (Ctrl+D), terminamos el shell*/
+		if (line == NULL) /*If (Ctrl+D), exit the shell*/
 		{
 			printf("\n");
 			break;
 		}
 
-		args = parse_input(line); /*Procesa la entrada*/
+		args = parse_input(line); /*Process input*/
 
-		if (args[0] != NULL && strcmp(args[0], "exit") == 0) /*Si es "exit", salimos*/
+		if (args[0] != NULL && strcmp(args[0], "exit") == 0) /*If "exit, exit*/
 		{
 			handle_exit(args);
 			free(line);
 			free(args);
-			break; /*Salimos del bucle y terminamos shell*/
+			break; /*Exit the loop and terminate shell*/
 		}
 
-		if (args[0] != NULL && strcmp(args[0], "env") == 0) /*Si es "env", muestra el env*/
+		if (args[0] != NULL && strcmp(args[0], "env") == 0) /*If "env", show env*/
 		{
 			handle_env();
 			free(line);
 			free(args);
-			continue;  /*Volvemos a mostrar el prompt*/
+			continue;  /*Re-show prompt*/
 		}
 
-		execute_command(args); /*Ejecuta el comando ingresado*/
-		free(line); /*Libera memoria del line*/
-		free(args); /*Libera memoria del args*/
+		execute_command(args); /*Execute command*/
+		free(line); /*Free line memory*/
+		free(args); /*Free args memory*/
 	} while (1);
 
 	return (0);
