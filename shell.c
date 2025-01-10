@@ -7,19 +7,33 @@
  */
 char *read_input(void)
 {
-	char *line = malloc(MAX_CMD_LEN * sizeof(char));
-	if (line == NULL)
-	{
-		perror("Error al asignar memoria");
-		exit(EXIT_FAILURE);
-	}
+	char *line = malloc(MAX_LEN * sizeof(char));
+    ssize_t bytes_read;
 
-	if (fgets(line, MAX_CMD_LEN, stdin) == NULL)
-	{
-		free(line);
-		return NULL;
-	}
-	return (line);
+    if (line == NULL)
+    {
+        perror("Error al asignar memoria");
+        exit(EXIT_FAILURE);
+    }
+
+    bytes_read = read(STDIN_FILENO, line, MAX_LEN - 1);
+
+    if (bytes_read == -1)
+    {
+        perror("Error al leer la entrada");
+        free(line);
+        return NULL;
+    }
+
+    if (bytes_read == 0)
+    {
+        free(line);
+        return NULL;
+    }
+
+    line[bytes_read] = '\0';
+
+    return (line);	
 }
 
 /**
@@ -109,6 +123,7 @@ char *find_command_in_path(char *command)
 void execute_command(char **args)
 {
 	pid_t pid = fork();
+	int status;
 
 	if (pid == -1)
 	{
@@ -126,7 +141,7 @@ void execute_command(char **args)
 	}
 	else
 	{
-		wait(NULL);
+		waitpid(pid, &status, 0);
 	}
 }
 

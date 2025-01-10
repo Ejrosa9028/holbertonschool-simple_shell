@@ -10,18 +10,17 @@ int main(void)
 	char *line, **args;
 
 	do {
-		if (isatty(STDIN_FILENO)) /*Dispaly prompt in interactive mode*/
+		if (isatty(STDIN_FILENO))
 		{
-			printf("($) ");
+			write(STDOUT_FILENO, "($) ", 4);
 		}
-
 		line = read_input(); /*Read user input*/
 
 		if (line == NULL) /*If (Ctrl+D), exit the shell*/
 		{
 			if (isatty(STDIN_FILENO))
 			{
-				printf("\n");
+				write(STDOUT_FILENO, "\n", 1);
 			}
 			break;
 		}

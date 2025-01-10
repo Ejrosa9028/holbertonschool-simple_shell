@@ -1,6 +1,6 @@
 #ifndef MAIN
 #define MAIN
-#define MAX_CMD_LEN 1024
+#define MAX_LEN 1024
 #define DELIM " \t\r\n\a"  /*Delimitadores para dividir la entrada*/
 
 #include <stdio.h>
