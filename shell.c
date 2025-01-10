@@ -12,7 +12,7 @@ char *read_input(void)
 
 	if (getline(&line, &bufsize, stdin) == -1)
 	{
-		if (feof(stdin))
+		if (line == NULL)
 		{
 			return (NULL);
 		}
@@ -111,8 +111,8 @@ void execute_command(char **args)
 		if (execvp(args[0], args) == -1)
 		{
 			perror(args[0]);
+			exit(EXIT_FAILURE);
 		}
-		exit(EXIT_FAILURE);
 	}
 	else
 	{
@@ -130,7 +130,7 @@ void execute_command(char **args)
  */
 void handle_exit(char **args)
 {
-	if (args[1] != NULL)
+	if (args == NULL || args[1] != NULL)
 	{
 		/*Si hay algún argumento adicional, muestra un error*/
 		fprintf(stderr, "Usage: exit\n");
