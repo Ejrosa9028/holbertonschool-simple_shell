@@ -201,3 +201,26 @@ int is_whitespace(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == '\f');
 }
+
+char *trim_spaces(char *str)
+{
+	char *end;
+
+	while (*str && is_whitespace(*str)) 
+	{  /*Eliminar los espacios iniciales*/
+		str++;
+	}
+
+	if (*str == 0)  /*Si la cadena solo tiene espacios, devolver una cadena vacía*/
+		return (str);
+
+	end = str + strlen(str) - 1;
+
+	while (is_whitespace(*end))
+	{  /*Eliminar los espacios finales*/
+		end--;
+	}
+
+	*(end + 1) = '\0';  /*Agregar el terminador nulo al final de la cadena*/
+	return (str);
+}
