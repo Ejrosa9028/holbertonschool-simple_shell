@@ -8,6 +8,7 @@
 int main(void)
 {
 	char *line, **args;
+	int execute_count = 0;
 
 	do {
 		if (isatty(STDIN_FILENO))
@@ -54,7 +55,23 @@ int main(void)
 			continue;  /*Re-show prompt*/
 		}
 
-		execute_command(args); /*Execute command*/
+		if (args[0] != NULL && strcmp(args[0], "/bin/ls") == 0)
+		{
+			if (execute_count < 3)  /*Limitar a 3 ejecuciones*/
+			{
+				execute_count++;  /*Incrementar el contador*/
+				execute_command(args);  /*Ejecutar el comando*/
+			}
+			else
+			{
+				printf("Se ha alcanzado el límite de ejecuciones de /bin/ls\n");
+			}
+		}
+		else
+		{
+			execute_command(args);  /*Ejecutar cualquier otro comando*/
+		}
+
 		free(line); /*Free line memory*/
 		free(args); /*Free args memory*/
 	} while (1);
