@@ -19,7 +19,7 @@ char *find_command_in_path(char *command)
 	path_copy = strdup(path); /*Make a copy of PATH*/
 	if (path_copy == NULL)
 	{
-		perror("Error duplicating PATH")
+		perror("Error duplicating PATH");
 			return (NULL);
 	}
 
