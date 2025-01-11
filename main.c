@@ -33,7 +33,7 @@ int main(void)
 			line[strlen(line) - 1] = '\0'; /* Quitar el '\n' del final */
 		}
 
-		if (is_empty_or_spaces(line)) 
+		if (is_empty_or_spaces(line))
 		{
 			free(line);
 			continue;
@@ -41,7 +41,8 @@ int main(void)
 
 		args = parse_input(line); /*Process input*/
 
-		if (args == NULL || args[0] == NULL) {
+		if (args == NULL || args[0] == NULL)
+		{
 			free(line);
 			continue;  /*If it could not be analyzed, the prompt is displayed again.*/
 		}

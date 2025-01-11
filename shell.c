@@ -92,8 +92,6 @@ char *find_command_in_path(char *command)
 	char *dir = strtok(path_copy, ":");
 	char *full_path = NULL;
 
-	printf("PATH: %s\n", path);
-
 	while (dir != NULL)
 	{
 		full_path = malloc(strlen(dir) + strlen(command) + 2);
@@ -101,7 +99,6 @@ char *find_command_in_path(char *command)
 
 		if (access(full_path, X_OK) == 0)
 		{
-			printf("Found command: %s\n", full_path);
 			free(path_copy);
 			return (full_path);
 		}
@@ -111,7 +108,6 @@ char *find_command_in_path(char *command)
 	}
 
 	free(path_copy);
-	printf("Command not found: %s\n", command);
 	return (NULL);
 }
 
@@ -129,25 +125,27 @@ void execute_command(char **args)
 	{
 		char *full_path = find_command_in_path(args[0]);
 
-		if (full_path)
+		normalize_path(command);
+
+		if (getenv("PATH") == NULL || strlen(getenv("PATH")) == 0)
 		{
-			execvp(full_path, args);
-			perror("Error executing command");
-			free(full_path);
+			if (command[0] != '/')
+			{
+				command = maloc(strlen("/bin/") + strlen(command) + 1);
+				strcpy(command, "/bin/");
+				strcat(command, args[0]);
+			}
 		}
-		else
+
+		if (execvp(command, args) == -1)  /* Intentar ejecutar el comando */
 		{
-			fprintf(stderr, "Command not found: %s\n", args[0]);
+			perror("Error al ejecutar el comando");
+			exit(EXIT_FAILURE);
 		}
-		exit(EXIT_FAILURE);
 	}
-	else if (pid < 0)
+	else if (pid < 0) /*Error en el fork */
 	{
-		perror("Error creating child process");
-	}
-	else
-	{
-		wait(NULL);
+		wait(NULL); /*Esperar a que el hijo termine */
 	}
 }
 
@@ -184,12 +182,6 @@ void handle_env(void)
 	}
 }
 
-/**
- * is_empty_or_spaces - Checks if a string is empty or contains only spaces
- * @str: The string to check
- *
- * Return: 1 if the string is empty or contains only spaces, 0 otherwise.
- */
 int is_empty_or_spaces(char *str)
 {
 	int i = 0;
@@ -205,24 +197,12 @@ int is_empty_or_spaces(char *str)
 	return (1);
 }
 
-/**
- * is_whitespace - Checks if a character is a whitespace character
- * @c: The character to check
- *
- * Return: 1 if the character is a whitespace character, 0 otherwise.
- */
 int is_whitespace(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\n' ||
 			c == '\r' || c == '\v' || c == '\f');
 }
 
-/**
- * trim_spaces - Trims leading and trailing whitespace from a string
- * @str: The string to trim
- *
- * Return: A pointer to the trimmed string.
- */
 char *trim_spaces(char *str)
 {
 	char *end;
@@ -246,12 +226,6 @@ char *trim_spaces(char *str)
 	return (str);
 }
 
-/**
- * normalize_path - Normalizes a file path by removing consecutive slashes
- * @path: The path to normalize
- *
- * Return: None.
- */
 void normalize_path(char *path)
 {
 	char *src = path, *dst = path;
@@ -268,41 +242,4 @@ void normalize_path(char *path)
 		dst++;
 	}
 	*dst = '\0';
-}
-
-/**
- * main - Entry point of the shell program
- *
- * Return: 0 on success, otherwise a different number.
- */
-int main(void)
-{
-	char *input;
-	char **args;
-
-	while (1)
-	{
-		printf("$ ");
-		input = read_input();
-		if (input == NULL)
-			continue;
-		args = parse_input(input);
-		if (args[0] == NULL)
-		{
-			free(input);
-			free(args);
-			continue;
-		}
-		if (strcmp(args[0], "exit") == 0)
-			handle_exit(args);
-		else if (strcmp(args[0], "env") == 0)
-			handle_env();
-		else
-			execute_command(args);
-
-		free(input);
-		free(args);
-	}
-
-	return (0);
 }
