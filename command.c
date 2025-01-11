@@ -11,24 +11,42 @@
 char *find_command_in_path(char *command)
 {
 	char *path = getenv("PATH");
-	char *path_copy = strdup(path);
-	char *dir = strtok(path_copy, ":");
-	char *full_path = NULL;
+	char *path_copy, *dir, *full_path;
 
+	if (path == NULL)
+		return (NULL);
+
+	path_copy = strdup(path); /*Make a copy of PATH*/
+	if (path_copy == NULL)
+	{
+		perror("Error duplicating PATH")
+			return (NULL);
+	}
+
+	dir = strtok(path_copy, ":");
 	while (dir != NULL)
 	{
 		full_path = malloc(strlen(dir) + strlen(command) + 2);
+		if (full_path == NULL)
+		{
+			perror("Error allocating memory for command path");
+			free(path_copy);
+			return (NULL);
+		}
+
 		sprintf(full_path, "%s/%s", dir, command);
 
-		/* If the file exists and is executable, we return it */
+		/*Check if the file exists and is executable */
 		if (access(full_path, X_OK) == 0)
 		{
 			free(path_copy);
 			return (full_path);
 		}
+
 		free(full_path);
 		dir = strtok(NULL, ":");
 	}
+
 	free(path_copy);
 	return (NULL);
 }
@@ -55,20 +73,26 @@ void execute_command(char **args)
 		{
 			if (command[0] != '/')
 			{
-				command = malloc(strlen("/bin/") + strlen(command) + 1);
-				strcpy(command, "/bin/");
-				strcat(command, args[0]);
+				char *temp = malloc(strlen("/bin/") + strlen(command) + 1);
+				if (temp == NULL)
+				{
+					perror("Error allocating memory for command path");
+					exit(EXIT_FAILURE);
+				}
+				strcpy(temp, "/bin/");
+				strcat(temp, args[0]);
+				command = temp;
 			}
 		}
-		if (execvp(command, args) == -1) /*intentar ejecutar el comando*/
+		if (execvp(command, args) == -1)
 		{
-			perror("Error al ejecutar el comando");
+			perror("Error executing command");
 			exit(EXIT_FAILURE);
 		}
 	}
 	else if (pid < 0)
 	{
-		perror("Error al crear el proceso hijo");
+		perror("Error creating child process");
 	}
 	else
 	{
