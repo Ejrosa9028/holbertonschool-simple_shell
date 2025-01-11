@@ -64,7 +64,7 @@ char **parse_input(char *line)
 		if (position >= bufsize)
 		{
 			bufsize += 64;
-			tokens = realloc(tokens, bufsize * sozeof(char *));
+			tokens = realloc(tokens, bufsize * sizeof(char *));
 			if (tokens == NULL)
 			{
 				perror("Error al realocar memoria para tokens");

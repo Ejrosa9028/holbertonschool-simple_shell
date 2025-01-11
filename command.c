@@ -18,7 +18,7 @@ char *find_command_in_path(char *command)
 	while (dir != NULL)
 	{
 		full_path = malloc(strlen(dir) + strlen(command) + 2);
-		sprint(full_path, "%s/%s", dir, command);
+		sprintf(full_path, "%s/%s", dir, command);
 
 		/* If the file exists and is executable, we return it */
 		if (access(full_path, X_OK) == 0)
@@ -26,9 +26,11 @@ char *find_command_in_path(char *command)
 			free(path_copy);
 			return (full_path);
 		}
+		free(full_path);
+		dir = strtok(NULL, ":");
 	}
-	free(full_path);
-	dir = strtok(NULL, ":");
+	free(path_copy);
+	return (NULL);
 }
 
 /**

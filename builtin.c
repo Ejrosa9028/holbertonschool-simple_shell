@@ -30,8 +30,8 @@ void handle_env(void)
 	int i = 0;
 
 	/* Print each environment variable in the format NAME=VALUE */
-	for (; enviroment[i] != NULL; i++)
+	for (; environ[i] != NULL; i++)
 	{
-		printf("%s\n", enviroment[i]);
+		printf("%s\n", environ[i]);
 	}
 }

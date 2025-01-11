@@ -8,7 +8,7 @@
  */
 int is_empty_or_spaces(char *str)
 {
-	int i = o;
+	int i = 0;
 
 	if (str == NULL)
 		return (1);
@@ -43,7 +43,7 @@ char *trim_spaces(char *str)
 {
 	char *end;
 
-	while (*str && iswhitespace(*str))
+	while (*str && is_whitespace(*str))
 	{ /*Elimina los espacios iniciales */
 		str++;
 	}
@@ -58,7 +58,7 @@ char *trim_spaces(char *str)
 		end--;
 	}
 
-	*(end + 1) = '70'; /* Agregsr el termino nulo al final de la cadena */
+	*(end + 1) = '\0'; /* Agregsr el termino nulo al final de la cadena */
 	return (str);
 }
 
