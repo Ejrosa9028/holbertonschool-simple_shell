@@ -44,12 +44,11 @@ char *read_input(void)
  */
 char **parse_input(char *line)
 {
-	int bufsize = 64;
-	int position = 0;
+	int bufsize = 64, position = 0;
 	char **tokens = malloc(bufsize * sizeof(char *));
 	char *token;
 
-	if (token == NULL)
+	if (tokens == NULL)
 	{
 	perror("Error al asignar memoria para tokens");
 	exit(EXIT_FAILURE);
