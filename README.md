@@ -63,5 +63,5 @@ gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o simple_shell
 ```
 ## Contributors
 
-Diego Mercado
-Emanuel Rosa
+Diego Mercado [Github profile](https://github.com/DMC254) | [Linkin](https://www.linkedin.com/in/diego-mercado-6040a9336/)
+Emanuel Rosa [Github profile](https://github.com/Ejrosa9028) | [Linkin](https://www.linkedin.com/in/emanuel-j-rosa-alamo-0a1615329/)
